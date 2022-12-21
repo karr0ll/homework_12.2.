@@ -1,36 +1,28 @@
-from flask import Flask, request, render_template, send_from_directory
-# from functions import ...
+from flask import Flask, send_from_directory
+import logging
 
-POST_PATH = "posts.json"
-UPLOAD_FOLDER = "uploads/images"
+# импорт блюпринта главной страницы
+from main.main_page_view import main_page_blueprint
+
+# импорт блюпринта загрузчика
+from loader.loader_view import loader_blueprint
+
 
 app = Flask(__name__)
 
+# регистрация блюпринта главной страницы
+app.register_blueprint(main_page_blueprint)
 
-@app.route("/")
-def page_index():
-    pass
+# регистрация блюпринта загрузки
+app.register_blueprint(loader_blueprint)
 
+# создание файла для записи логов
+logging.basicConfig(filename="info.log", level=logging.INFO)
 
-@app.route("/list")
-def page_tag():
-    pass
-
-
-@app.route("/post", methods=["GET", "POST"])
-def page_post_form():
-    pass
-
-
-@app.route("/post", methods=["POST"])
-def page_post_upload():
-    pass
-
-
+# вью для отображения изображение в постах
 @app.route("/uploads/<path:path>")
 def static_dir(path):
     return send_from_directory("uploads", path)
 
 
 app.run()
-
